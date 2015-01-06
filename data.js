@@ -24,27 +24,42 @@ function dataAttr( elem, key, data ) {
 
 	// If nothing was found internally, try to fetch any
 	// data from the HTML5 data-* attribute
-    // 如果在cache没有找到数据，
+	// 如果在cache没有找到数据，
     // 尝试从  HTML5 data-* 属性中 查找
 
     // data 如果为空 且  元素类型为 节点
 	if ( data === undefined && elem.nodeType === 1 ) {
+        // 将 key 转换成 HTML5 data-* 属性
+        // addName => data-add-name
 		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
+        // 获取属性值
 		data = elem.getAttribute( name );
 
+        // 如果 数据的类型为 string, 说明有其属性
 		if ( typeof data === "string" ) {
 			try {
+                // 尝试转换属性值
 				data = data === "true" ? true :
 					data === "false" ? false :
 					data === "null" ? null :
 					// Only convert to a number if it doesn't change the string
+                    // 如果不会更改字符串，只转换为数字
 					+data + "" === data ? +data :
+                    // rbrace 测试是否为 json 字符串，jQuery.parseJSON 来解析成 json
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
+                    // 否则当是普通的字符串
 					data;
 			} catch ( e ) {}
 
 			// Make sure we set the data so it isn't changed later
+            // 确定我们set data, 所以之后不会改变
+            // "<div data-aaa='abc'></div>"
+            // $($0).data('aaa')  => 'abc'
+            // $($0).attr('data-aaa','xxx')
+            // $($0).data('aaa')  => 'abc'
 			dataUser.set( elem, key, data );
+
+        //否则 undefined
 		} else {
 			data = undefined;
 		}
