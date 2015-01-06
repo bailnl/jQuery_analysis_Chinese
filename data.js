@@ -19,6 +19,7 @@ define([
 var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
 	rmultiDash = /([A-Z])/g;
 
+// 用于设置 HTML5 data-* 属性到cache中，并返回 属性值
 function dataAttr( elem, key, data ) {
 	var name;
 
@@ -64,19 +65,26 @@ function dataAttr( elem, key, data ) {
 			data = undefined;
 		}
 	}
+    // 返回数据
 	return data;
 }
 
 jQuery.extend({
+    // 判断是有 data
 	hasData: function( elem ) {
+        // 从来 User 中判断，如果没有则在 Priv 中判断
 		return dataUser.hasData( elem ) || dataPriv.hasData( elem );
 	},
 
+    // 设置或者获取 data
 	data: function( elem, name, data ) {
+        //
 		return dataUser.access( elem, name, data );
 	},
 
+    // 删除 data
 	removeData: function( elem, name ) {
+        // 从 User 中删除
 		dataUser.remove( elem, name );
 	},
 
@@ -96,7 +104,6 @@ jQuery.fn.extend({
 		var i, name, data,
 			elem = this[ 0 ],
 			attrs = elem && elem.attributes;
-
 		// Gets all values
 		if ( key === undefined ) {
 			if ( this.length ) {
