@@ -24,6 +24,10 @@ function dataAttr( elem, key, data ) {
 
 	// If nothing was found internally, try to fetch any
 	// data from the HTML5 data-* attribute
+    // 如果在cache没有找到数据，
+    // 尝试从  HTML5 data-* 属性中 查找
+
+    // data 如果为空 且  元素类型为 节点
 	if ( data === undefined && elem.nodeType === 1 ) {
 		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
 		data = elem.getAttribute( name );
