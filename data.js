@@ -90,10 +90,13 @@ jQuery.extend({
 
 	// TODO: Now that all calls to _data and _removeData have been replaced
 	// with direct calls to dataPriv methods, these can be deprecated.
+    // _data 和 _removeDate 已经被替换，这些可以被废弃，直接调用dataPriv的方法
+
+    // 设置或者获取 dataPriv data
 	_data: function( elem, name, data ) {
 		return dataPriv.access( elem, name, data );
 	},
-
+    // 删除 dataPriv data
 	_removeData: function( elem, name ) {
 		dataPriv.remove( elem, name );
 	}
@@ -102,37 +105,51 @@ jQuery.extend({
 jQuery.fn.extend({
 	data: function( key, value ) {
 		var i, name, data,
+            // 获取第一元素
 			elem = this[ 0 ],
+            // 获取元素的所有的属性  attributes
 			attrs = elem && elem.attributes;
 		// Gets all values
+        // 如果没有key说明是获取所有的 value
 		if ( key === undefined ) {
+            // 元素长度存在
 			if ( this.length ) {
+                // 获取所有的 cache data
 				data = dataUser.get( elem );
 
+                // 如果是 元素 节点  并且是   "没有获取过" data-* 属性时
 				if ( elem.nodeType === 1 && !dataPriv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
+                    // 遍历元素的 attributes的每个属性
 					while ( i-- ) {
-
 						// Support: IE11+
 						// The attrs elements can be null (#14894)
 						if ( attrs[ i ] ) {
 							name = attrs[ i ].name;
+                            // 查找 data-* 的属性
 							if ( name.indexOf( "data-" ) === 0 ) {
+                                // 将元素转换为 驼峰的写法
 								name = jQuery.camelCase( name.slice(5) );
+                                // 获取 data-* 的属性值
 								dataAttr( elem, name, data[ name ] );
 							}
 						}
 					}
+                    // 将设置为 "获取过" data-* 属性
 					dataPriv.set( elem, "hasDataAttrs", true );
 				}
 			}
 
+            // 返回 data cache
 			return data;
 		}
 
 		// Sets multiple values
+        // 设置多个属性值
 		if ( typeof key === "object" ) {
+            // 遍历jQuery对象
 			return this.each(function() {
+                // 为每一个dom元素设置 cache data
 				dataUser.set( this, key );
 			});
 		}
@@ -194,7 +211,9 @@ jQuery.fn.extend({
 	},
 
 	removeData: function( key ) {
+        // 遍历jQuery对象
 		return this.each(function() {
+            // 为每一个元素删除 对应的 data
 			dataUser.remove( this, key );
 		});
 	}

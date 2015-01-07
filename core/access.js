@@ -4,34 +4,58 @@ define([
 
 // Multifunctional method to get and set values of a collection
 // The value/s can optionally be executed if it's a function
+
+// elems 元素
+// fn 功能处理函数
+// key 键
+// value 值
+// chainable 链式操作
+// emptyGet  没有选中到元素的返回值
+// raw value是否为原始数据，如果raw是true，说明value是原始数据，如果是false，说明raw是个函数
 var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	var i = 0,
 		len = elems.length,
 		bulk = key == null;
 
 	// Sets many values
-	//
+	// 设置多个值
+    // 如果 key 是对象
 	if ( jQuery.type( key ) === "object" ) {
+        // 可链式操作
 		chainable = true;
+        // 迭代对象
 		for ( i in key ) {
+            // 递归操作 设置值
 			access( elems, fn, i, key[i], true, emptyGet, raw );
 		}
 
 	// Sets one value
+    // 设置 单个值
+    // value 不为空
 	} else if ( value !== undefined ) {
+        // 可链式操作
 		chainable = true;
 
+        // 如果 value 不是函数
 		if ( !jQuery.isFunction( value ) ) {
+            // 那么 value 就是原始数据
 			raw = true;
 		}
 
+        // bulk为true，那么 key的为 空
+        // key为空的处理
 		if ( bulk ) {
 			// Bulk operations run against the entire set
+            // 如果 value 不是函数 或者 强制 raw 为 true
+            // 说明 value 是原始数据
 			if ( raw ) {
+                // 改变处理函数fn并把 value传入
 				fn.call( elems, value );
+                // 注销掉 fn
 				fn = null;
 
 			// ...except when executing function values
+            // 如果 value 是一个函数
 			} else {
 				bulk = fn;
 				fn = function( elem, key, value ) {
@@ -47,11 +71,15 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		}
 	}
 
+    // 如果 chainable 为 true，那么就是set操作
 	return chainable ?
+        // 返回元素为后续的链式操作
 		elems :
 
 		// Gets
+        // 获取操作
 		bulk ?
+            //
 			fn.call( elems ) :
 			len ? fn( elems[0], key ) : emptyGet;
 };
