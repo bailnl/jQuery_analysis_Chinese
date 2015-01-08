@@ -190,9 +190,11 @@ jQuery.fn.extend({
 			}
 
 			// Set the data...
+            // 设置 data
 			this.each(function() {
 				// First, attempt to store a copy or reference of any
 				// data that might've been store with a camelCased key.
+                // 首先，尝试将
 				var data = dataUser.get( this, camelKey );
 
 				// For HTML5 data-* attribute interop, we have to

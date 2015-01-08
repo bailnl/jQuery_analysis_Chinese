@@ -6,7 +6,7 @@ define([
 // The value/s can optionally be executed if it's a function
 
 // elems 元素
-// fn 功能处理函数
+// fn 功能处理函数  比如 jQuery.attr jQuery.prop
 // key 键
 // value 值
 // chainable 链式操作
@@ -25,13 +25,14 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		chainable = true;
         // 迭代对象
 		for ( i in key ) {
-            // 递归操作 设置值
+            // 递归调用jQuery.access  设置值
 			access( elems, fn, i, key[i], true, emptyGet, raw );
 		}
 
 	// Sets one value
     // 设置 单个值
     // value 不为空
+    // 是一个设置的操作
 	} else if ( value !== undefined ) {
         // 可链式操作
 		chainable = true;
@@ -48,6 +49,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 			// Bulk operations run against the entire set
             // 如果 value 不是函数 或者 强制 raw 为 true
             // 说明 value 是原始数据
+            // $('body').attr(null,{ a:1, b:2 })
 			if ( raw ) {
                 // 改变处理函数fn并把 value传入
 				fn.call( elems, value );
@@ -57,6 +59,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 			// ...except when executing function values
             // 如果 value 是一个函数
 			} else {
+                // 保存一下处理函数
 				bulk = fn;
 				fn = function( elem, key, value ) {
 					return bulk.call( jQuery( elem ), value );
@@ -64,9 +67,19 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 			}
 		}
 
+        // 如果 fn 存在，调用每一个元素
 		if ( fn ) {
 			for ( ; i < len; i++ ) {
-				fn( elems[i], key, raw ? value : value.call( elems[i], i, fn( elems[i], key ) ) );
+				fn( elems[i], key,
+                    // value 是否为 原始值
+                    raw ?
+                        // 如果是 直接传入 原始值
+                        value :
+                        // 否则为每个元素调用 value 函数
+                        // 例如 $('body').attr('a',function(i,v){ })
+                        // 但是 会先调用 jQuery.attr( elems[i], key ) 返回 value 并传入 回调
+                        value.call( elems[i], i, fn( elems[i], key ) )
+                );
 			}
 		}
 	}
@@ -81,7 +94,9 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		bulk ?
             //
 			fn.call( elems ) :
-			len ? fn( elems[0], key ) : emptyGet;
+			len ?
+                fn( elems[0], key ) :
+                emptyGet;
 };
 
 return access;
