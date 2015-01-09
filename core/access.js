@@ -15,6 +15,7 @@ define([
 var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	var i = 0,
 		len = elems.length,
+        // key 是否为空
 		bulk = key == null;
 
 	// Sets many values
@@ -25,7 +26,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		chainable = true;
         // 迭代对象
 		for ( i in key ) {
-            // 递归调用jQuery.access  设置值
+            // 递归调用jQuery.access 设置值
 			access( elems, fn, i, key[i], true, emptyGet, raw );
 		}
 
@@ -33,7 +34,8 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
     // 设置 单个值
     // value 不为空
     // 是一个设置的操作
-	} else if ( value !== undefined ) {
+	}
+    else if ( value !== undefined ) {
         // 可链式操作
 		chainable = true;
 
@@ -44,7 +46,8 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		}
 
         // bulk为true，那么 key的为 空
-        // key为空的处理
+        // 如果key为空的处理
+        // Data key为null 不处理
 		if ( bulk ) {
 			// Bulk operations run against the entire set
             // 如果 value 不是函数 或者 强制 raw 为 true
@@ -62,6 +65,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
                 // 保存一下处理函数
 				bulk = fn;
 				fn = function( elem, key, value ) {
+                    // 改变一下上下文
 					return bulk.call( jQuery( elem ), value );
 				};
 			}
@@ -88,14 +92,16 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 	return chainable ?
         // 返回元素为后续的链式操作
 		elems :
-
 		// Gets
         // 获取操作
 		bulk ?
-            //
+            // 如果 bulk 为true ，改成 处理函数fn 的上下文
 			fn.call( elems ) :
+            // 否则根据元素的长度做操作
 			len ?
+                // 当 elems 的长度 大于 0 时，获取第一个元素
                 fn( elems[0], key ) :
+                // 否则返回 emptyGet (没有元素的返回值)
                 emptyGet;
 };
 

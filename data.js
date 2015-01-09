@@ -154,6 +154,7 @@ jQuery.fn.extend({
 			});
 		}
 
+        // 设置
 		return access( this, function( value ) {
 			var data,
 				camelKey = jQuery.camelCase( key );
