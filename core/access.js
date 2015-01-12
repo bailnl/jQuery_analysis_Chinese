@@ -11,7 +11,7 @@ define([
 // value 值
 // chainable 链式操作
 // emptyGet  没有选中到元素的返回值
-// raw value是否为原始数据，如果raw是true，说明value是原始数据，如果是false，说明raw是个函数
+// raw 标识 value 是否为原始数据，如果raw是true，说明 value 是原始数据，如果是false，说明 value 是个函数
 var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	var i = 0,
 		len = elems.length,
@@ -47,7 +47,6 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 
         // bulk为true，那么 key的为 空
         // 如果key为空的处理
-        // Data key为null 不处理
 		if ( bulk ) {
 			// Bulk operations run against the entire set
             // 如果 value 不是函数 或者 强制 raw 为 true
