@@ -157,6 +157,7 @@ jQuery.fn.extend({
         // 设置
 		return access( this, function( value ) {
 			var data,
+                // 转驼峰
 				camelKey = jQuery.camelCase( key );
 
 			// The calling jQuery object (element matches) is not empty
@@ -164,29 +165,44 @@ jQuery.fn.extend({
 			// `value` parameter was not undefined. An empty jQuery object
 			// will result in `undefined` for elem = this[ 0 ] which will
 			// throw an exception if an attempt to read a data cache is made.
+            // 调用的 jQuery对象(匹配的元素) 不为空
+            // (也因此有一个元素会出现在 this[ 0 ] )
+            // 且 value 不是 未定义
+            // 一个空的jQuery对象，将 elem = this[ 0 ] 会导致结果为 未定义
+            // 如果尝试去获取 数据缓存，会抛出一个异常。
 			if ( elem && value === undefined ) {
 				// Attempt to get data from the cache
 				// with the key as-is
+                // 尝试直接用 key 在 cache中获取
 				data = dataUser.get( elem, key );
+                // 如果不为空
 				if ( data !== undefined ) {
-					return data;
+                    // 返回数据
+                    return data;
 				}
 
 				// Attempt to get data from the cache
 				// with the key camelized
+                // 尝试用转换成的驼峰 key 在 cache 中获取
 				data = dataUser.get( elem, camelKey );
+                // 如果不为空
 				if ( data !== undefined ) {
+                    // 返回数据
 					return data;
 				}
 
 				// Attempt to "discover" the data in
 				// HTML5 custom data-* attrs
+                // 尝试在 HTML5 自定义属性 data-* 中获取 data
 				data = dataAttr( elem, camelKey, undefined );
+                // 如果不为空
 				if ( data !== undefined ) {
-					return data;
+                    // 返回数据
+                    return data;
 				}
 
 				// We tried really hard, but the data doesn't exist.
+                // 我们真的很努力，但是该数据不存在。
 				return;
 			}
 

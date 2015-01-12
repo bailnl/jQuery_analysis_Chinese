@@ -54,6 +54,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
             // $('body').attr(null,{ a:1, b:2 })
 			if ( raw ) {
                 // 改变处理函数fn并把 value传入
+                // data.js 走这里
 				fn.call( elems, value );
                 // 注销掉 fn
 				fn = null;
