@@ -253,7 +253,7 @@ Data.prototype = {
 			this.cache[ owner[ this.expando ] ] || {}
 		);
 	},
-	// 此方法用于从 cache
+	// 此方法用于从 cache 取消关联
 	discard: function( owner ) {
 		// 如果 owner 的 cache 关联属性存在
 		if ( owner[ this.expando ] ) {

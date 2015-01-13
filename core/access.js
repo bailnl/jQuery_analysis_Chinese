@@ -4,6 +4,8 @@ define([
 
 // Multifunctional method to get and set values of a collection
 // The value/s can optionally be executed if it's a function
+// 多功能的方法来获取和设置值的集合
+// 如果 value 是一个执行的函数 (可选)
 
 // elems 元素
 // fn 功能处理函数  比如 jQuery.attr jQuery.prop
@@ -52,9 +54,9 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
             // 如果 value 不是函数 或者 强制 raw 为 true
             // 说明 value 是原始数据
             // $('body').attr(null,{ a:1, b:2 })
-			if ( raw ) {
+            // data.js 走这里
+            if ( raw ) {
                 // 改变处理函数fn并把 value传入
-                // data.js 走这里
 				fn.call( elems, value );
                 // 注销掉 fn
 				fn = null;
@@ -72,6 +74,7 @@ var access = jQuery.access = function( elems, fn, key, value, chainable, emptyGe
 		}
 
         // 如果 fn 存在，调用每一个元素
+        // data.js 不走这里
 		if ( fn ) {
 			for ( ; i < len; i++ ) {
 				fn( elems[i], key,

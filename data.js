@@ -16,7 +16,19 @@ define([
 //	5. Avoid exposing implementation details on user objects (eg. expando properties)
 //	6. Provide a clear path for implementation upgrade to WeakMap in 2014
 
+//	执行摘要
+//
+//	1. 强制API表现和语义 与 1.9.x分支兼容
+//	2. 通过简单机制来减少路径，提高模块的可维护性
+//	3. 使用相同的简单机制来支持"private" 和 "user"的数据.
+//	4. 不会将"private"数据暴露给用户代码 (TODO: Drop _data, _removeData)
+//	5. 避免在用户对象上暴露实现细节(例如. expando properties)
+//	6. 在2014为实现升级到WeakMap(ES6)提供一个清晰的路径
+
+
+// 匹配以{或[开头 内容为[A-Za-z0-9_][^A-Za-z0-9_] 以}或[结尾的字符串
 var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
+    // 匹配 A-Z
 	rmultiDash = /([A-Z])/g;
 
 // 用于设置 HTML5 data-* 属性到cache中，并返回 属性值
@@ -39,7 +51,7 @@ function dataAttr( elem, key, data ) {
         // 如果 数据的类型为 string, 说明有其属性
 		if ( typeof data === "string" ) {
 			try {
-                // 尝试转换属性值
+                // 尝试转换属性值成原始值
 				data = data === "true" ? true :
 					data === "false" ? false :
 					data === "null" ? null :
@@ -78,7 +90,7 @@ jQuery.extend({
 
     // 设置或者获取 data
 	data: function( elem, name, data ) {
-        //
+        // 通过 access 方法来做多功能操作
 		return dataUser.access( elem, name, data );
 	},
 
@@ -166,7 +178,7 @@ jQuery.fn.extend({
 			// will result in `undefined` for elem = this[ 0 ] which will
 			// throw an exception if an attempt to read a data cache is made.
             // 调用的 jQuery对象(匹配的元素) 不为空
-            // (也因此有一个元素会出现在 this[ 0 ] )
+            // (也因此会有一个元素在在 this[ 0 ] 上 )
             // 且 value 不是 未定义
             // 一个空的jQuery对象，将 elem = this[ 0 ] 会导致结果为 未定义
             // 如果尝试去获取 数据缓存，会抛出一个异常。
@@ -208,20 +220,25 @@ jQuery.fn.extend({
 
 			// Set the data...
             // 设置 data
+            // 遍历元素
 			this.each(function() {
 				// First, attempt to store a copy or reference of any
 				// data that might've been store with a camelCased key.
-                // 首先，尝试将
+                // 首先，尝试用 驼峰key 去复制或者是引用已存储的数据
 				var data = dataUser.get( this, camelKey );
 
 				// For HTML5 data-* attribute interop, we have to
 				// store property names with dashes in a camelCase form.
 				// This might not apply to all properties...*
+                // HTML5 data-* 属性互操作，
+                // 我们不得不存储 驼峰key 的 属性名称
+                // 这可能不适合所有的属性
 				dataUser.set( this, camelKey, value );
 
 				// *... In the case of properties that might _actually_
 				// have dashes, we need to also store a copy of that
 				// unchanged property.
+                // 在属性中有破折号的情况下，我们也需要存储副本
 				if ( key.indexOf("-") !== -1 && data !== undefined ) {
 					dataUser.set( this, key, value );
 				}
