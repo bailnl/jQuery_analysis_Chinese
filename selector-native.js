@@ -155,6 +155,9 @@ jQuery.extend({
 		return a === bup || !!( bup && bup.nodeType === 1 && adown.contains(bup) );
 	},
 	isXMLDoc: function( elem ) {
+		// 元素的根节点或者elem  的文档根节点的名称是否为 html
+		// 如果不等于那么 就是xml文档　
+		// 否则当是html文档
 		return (elem.ownerDocument || elem).documentElement.nodeName !== "HTML";
 	},
 	expr: {

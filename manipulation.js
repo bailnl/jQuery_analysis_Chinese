@@ -28,7 +28,7 @@ var
 	// &
 	// &#
 	rhtml = /<|&#?\w+;/,
-
+	// 匹配 <script 或  <style 或 <link
 	rnoInnerhtml = /<(?:script|style|link)/i,
 	// checked="checked" or checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
