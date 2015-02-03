@@ -31,12 +31,17 @@ var
 	// 匹配 <script 或  <style 或 <link
 	rnoInnerhtml = /<(?:script|style|link)/i,
 	// checked="checked" or checked
+    // 匹配 checked="checked" 或者 checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
+    // 匹配script类型 "" 或者 /javascript 或者 /ecmascript
 	rscriptType = /^$|\/(?:java|ecma)script/i,
+    // 匹配 true/ 开头
 	rscriptTypeMasked = /^true\/(.*)/,
+    // 匹配任意空格开头(<![CDATA[或<!--) 或者 (]]> 或 -->)做空格结尾
 	rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,
 
 	// We have to close these tags to support XHTML (#13200)
+    // 由于浏览器的实现情况不一样 为了保证兼容性，不得不关闭这些标签来支持xhtml
 	wrapMap = {
 
 		// Support: IE9
