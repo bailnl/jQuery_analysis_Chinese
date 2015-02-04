@@ -65,12 +65,15 @@ var rootjQuery,
 			if ( match && (match[1] || !context) ) {
 
 				// HANDLE: $(html) -> $(array)
+                // 处理：$(html) -> $(数组)
 				if ( match[1] ) {
 					// 如果 context 是 jQuery对象 返回 context第一个元素(也就是原生js对象)，  否则 直接 使用 context
 					context = context instanceof jQuery ? context[0] : context;
 
 					// Option to run scripts is true for back-compat
+                    // 运行脚本 选项设置为true 保证向后兼容
 					// Intentionally let the error be thrown if parseHTML is not present
+                    // 如果 parseHTML 不存在，有意抛出错误
 					jQuery.merge( this, jQuery.parseHTML(
 						match[1],
 						// 传入上下文
@@ -78,80 +81,116 @@ var rootjQuery,
 						// 那么取 context.ownerDocument (有可能是frame) 作为上下文 (document.ownerDocument => null)
 						// 否则用 document
 						context && context.nodeType ? context.ownerDocument || context : document,
-						//
+						// 包含script标签
 						true
 					) );
 
 					// HANDLE: $(html, props)
+                    // 处理$(html,属性)
+                    // 判断是否简单的标签 且 context 的普通对象
 					if ( rsingleTag.test( match[1] ) && jQuery.isPlainObject( context ) ) {
+                        // 遍历context
 						for ( match in context ) {
 							// Properties of context are called as methods if possible
+                            // 可能context的属性是方法
 							if ( jQuery.isFunction( this[ match ] ) ) {
+                                // 调用方法
 								this[ match ]( context[ match ] );
 
 							// ...and otherwise set as attributes
+                            // 设置属性
 							} else {
 								this.attr( match, context[ match ] );
 							}
 						}
 					}
 
+                    // 返回对象
 					return this;
 
 				// HANDLE: $(#id)
-				} else {
+				// 处理 id
+                } else {
+                    // 直接通过  getElementById 获取元素
 					elem = document.getElementById( match[2] );
 
 					// Support: Blackberry 4.6
 					// gEBID returns nodes no longer in the document (#6963)
+                    // 通过id获取的节点元素不在文档中（有可能在fragment）
 					if ( elem && elem.parentNode ) {
 						// Inject the element directly into the jQuery object
+                        // 将元素注入到jQuery对象
 						this.length = 1;
 						this[0] = elem;
 					}
 
+                    // 通过id获取的元素 context为 document
 					this.context = document;
+                    // 保存 选择器
 					this.selector = selector;
+                    // 返回jQuery对象
 					return this;
 				}
 
 			// HANDLE: $(expr, $(...))
-			} else if ( !context || context.jquery ) {
+			// 处理：$(选择器，jQuery对象上下文)
+            // 如果不存在 context 而在  rootjQuery 中find selector
+            // 如果context存在且context.jquery存在时，认为context为jQuery对象且在其find selector
+            } else if ( !context || context.jquery ) {
 				return ( context || rootjQuery ).find( selector );
 
 			// HANDLE: $(expr, context)
+            // $(选择器，上下文)
 			// (which is just equivalent to: $(context).find(expr)
+            // 这相当于$(context).find(expr)
 			} else {
+                // 通过this.constructor也就是jQuery将context转化成jquery对象再 find　选择器
 				return this.constructor( context ).find( selector );
 			}
 
 		// HANDLE: $(DOMElement)
-		} else if ( selector.nodeType ) {
+		// 处理：$(dom元素)
+        // 如果元素有.nodeType属性 那么就是单个元素
+        } else if ( selector.nodeType ) {
+            // 保存元素以及上下文
 			this.context = this[0] = selector;
+            // 设置jQuery对象的length
 			this.length = 1;
+            // 返回jQuery对象
 			return this;
 
 		// HANDLE: $(function)
+        // 处理： $(函数)
 		// Shortcut for document ready
+        // document ready 的快捷方式
 		} else if ( jQuery.isFunction( selector ) ) {
+            // 如果document ready不为空也就是存在
 			return rootjQuery.ready !== undefined ?
+                // 那么将selector传入document ready事件中
 				rootjQuery.ready( selector ) :
 				// Execute immediately if ready is not present
+                // 如果 ready 不存在则传入jQuery并立即执行函数
 				selector( jQuery );
 		}
 
+        // 如果 selector 不为 undefined
 		if ( selector.selector !== undefined ) {
+            // 保存 选择器 以及  上下文
 			this.selector = selector.selector;
 			this.context = selector.context;
 		}
 
+        // 处理 []、object（类数组）
+        // 最后只能将 selector 合并到 this（jQuery对象中）
 		return jQuery.makeArray( selector, this );
 	};
 
 // Give the init function the jQuery prototype for later instantiation
+//
 init.prototype = jQuery.fn;
 
 // Initialize central reference
+// 初始化document对象为jQuery对象
 rootjQuery = jQuery( document );
 
 return init;
