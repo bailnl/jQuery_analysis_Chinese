@@ -86,7 +86,7 @@ var rootjQuery,
 					) );
 
 					// HANDLE: $(html, props)
-                    // 处理$(html,属性)
+                    // 处理：$(html,属性) 情况
                     // 判断是否简单的标签 且 context 的普通对象
 					if ( rsingleTag.test( match[1] ) && jQuery.isPlainObject( context ) ) {
                         // 遍历context
@@ -105,11 +105,11 @@ var rootjQuery,
 						}
 					}
 
-                    // 返回对象
+                    // 返回jQuery对象
 					return this;
 
 				// HANDLE: $(#id)
-				// 处理 id
+				// 处理：id的情况
                 } else {
                     // 直接通过  getElementById 获取元素
 					elem = document.getElementById( match[2] );
@@ -187,11 +187,12 @@ var rootjQuery,
 
 // Give the init function the jQuery prototype for later instantiation
 // 给init方法实例化的jQuery原型
-// 由于
+// 由于jQuery对象是由init函数构造，修正原型的指向为jQuery.prototype
 init.prototype = jQuery.fn;
 
 // Initialize central reference
 // 初始化document对象为jQuery对象
+// 多次使用缓存起来
 rootjQuery = jQuery( document );
 
 return init;

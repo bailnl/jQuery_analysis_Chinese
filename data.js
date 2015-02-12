@@ -245,7 +245,7 @@ jQuery.fn.extend({
 			});
 		}, null, value, arguments.length > 1, null, true );
 	},
-
+    // 删除数据
 	removeData: function( key ) {
         // 遍历jQuery对象
 		return this.each(function() {
