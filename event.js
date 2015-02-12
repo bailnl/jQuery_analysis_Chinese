@@ -866,14 +866,20 @@ jQuery.fn.extend({
 		});
 	},
 
+    // 触发所有元素的对应事件
 	trigger: function( type, data ) {
+        // 遍历元素触发事件 并返回对象
 		return this.each(function() {
 			jQuery.event.trigger( type, data, this );
 		});
 	},
+    // 触发第一个元素的对应事件
 	triggerHandler: function( type, data ) {
+        // 取得第一个元素
 		var elem = this[0];
+        // 如果存在
 		if ( elem ) {
+            // 触发对应事件并返回
 			return jQuery.event.trigger( type, data, elem, true );
 		}
 	}
