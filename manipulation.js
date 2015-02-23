@@ -90,12 +90,19 @@ function restoreScript( elem ) {
 }
 
 // Mark scripts as having already been evaluated
+// 脚本标记为已经执行
 function setGlobalEval( elems, refElements ) {
 	var i = 0,
+        // 获取元素集合的长度
 		l = elems.length;
 
+    // 遍历元素
 	for ( ; i < l; i++ ) {
+        // 为每个元素设置globalEval的data
 		dataPriv.set(
+            // 如果refElements取反为false，说明已经设置过了
+            // 通过get获取
+            // 否则设置为true
 			elems[ i ], "globalEval", !refElements || dataPriv.get( refElements[ i ], "globalEval" )
 		);
 	}
@@ -325,7 +332,7 @@ jQuery.extend({
 				continue;
 			}
 
-			// 检测
+			// 检测elem的根元素是否包含elem
 			contains = jQuery.contains( elem.ownerDocument, elem );
 
 			// Append to fragment
